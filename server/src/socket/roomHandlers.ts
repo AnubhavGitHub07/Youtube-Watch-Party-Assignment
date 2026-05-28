@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { rooms } from "../rooms/roomStore";
-import { Participant, Room } from "../types/room.types";
+import { Participant, Room, Role } from "../types/room.types";
 import {
     canControlPlayback,
     isHost,
@@ -17,6 +17,17 @@ const removeUserFromRoom = (io: Server, socketId: string, roomId: string) => {
     if (participantIndex !== -1) {
         const removedParticipant = room.participants[participantIndex];
         room.participants.splice(participantIndex, 1);
+
+        // If the host left and there are other participants, elect a new host
+        if (removedParticipant.role === "HOST" && room.participants.length > 0) {
+            const nextHost = room.participants[0];
+            nextHost.role = "HOST";
+            room.hostId = nextHost.socketId;
+            
+            io.to(roomId).emit("roles_updated", {
+                participants: room.participants,
+            });
+        }
 
         io.to(roomId).emit("user_left", {
             participants: room.participants,
@@ -68,13 +79,19 @@ export const registerRoomHandlers = (
                 rooms[roomId] = room;
             }
 
+            // Check if there is already an active host in the room
+            const hasActiveHost = room.participants.some(p => p.role === "HOST");
+            
+            let assignedRole: Role = "PARTICIPANT";
+            if (!hasActiveHost || room.hostId === socket.id) {
+                room.hostId = socket.id;
+                assignedRole = "HOST";
+            }
+
             const participant: Participant = {
                 socketId: socket.id,
                 username,
-                role:
-                    room.hostId === socket.id
-                        ? "HOST"
-                        : "PARTICIPANT",
+                role: assignedRole,
             };
 
             room.participants.push(participant);
@@ -85,7 +102,7 @@ export const registerRoomHandlers = (
                 participants: room.participants,
             });
 
-            console.log(`${username} joined room ${roomId}`);
+            console.log(`${username} joined room ${roomId} as ${assignedRole}`);
         }
     );
 
