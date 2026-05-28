@@ -22,6 +22,9 @@ function RoomPage() {
   const username =
     location.state?.username || "Guest";
 
+  const roomName: string =
+    location.state?.roomName || "Watch Party Room";
+
   const [participants, setParticipants] = useState<
     Participant[]
   >([]);
@@ -66,9 +69,14 @@ function RoomPage() {
   return (
     <div className="min-h-screen p-8">
 
-      <h1 className="text-3xl font-bold mb-6">
-        Room: {roomId}
-      </h1>
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold">
+          {roomName}
+        </h1>
+        <p className="text-sm text-slate-400 mt-1">
+          Room ID: {roomId}
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
