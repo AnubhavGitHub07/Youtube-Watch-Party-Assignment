@@ -147,11 +147,19 @@ function RoomPage() {
     };
 
     useEffect(() => {
-        socket.emit("join_room", {
-            roomId,
-            username,
-            roomName,
-        });
+        const handleConnect = () => {
+            socket.emit("join_room", {
+                roomId,
+                username,
+                roomName,
+            });
+        };
+
+        if (socket.connected) {
+            handleConnect();
+        }
+
+        socket.on("connect", handleConnect);
 
         const interval = setInterval(() => {
             if (!canControlRef.current) return;
@@ -275,6 +283,7 @@ function RoomPage() {
             if (disclaimerTimeoutRef.current) {
                 clearTimeout(disclaimerTimeoutRef.current);
             }
+            socket.off("connect", handleConnect);
             socket.emit("leave_room", { roomId });
             socket.off("user_joined", handleUserJoined);
             socket.off("user_left", handleUserLeft);
