@@ -8,6 +8,9 @@ export interface Participant {
 
 export interface Room {
   id: string;
+
+  roomName: string;
+
   hostId: string;
 
   currentVideoId: string;

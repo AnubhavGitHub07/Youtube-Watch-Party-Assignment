@@ -1,12 +1,35 @@
-import YouTube from "react-youtube";
+import YouTube, { type YouTubeProps } from "react-youtube";
 
 interface VideoPlayerProps {
   videoId: string;
+  onReady?: (player: any) => void;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onSeek?: (time: number) => void;
 }
 
 function VideoPlayer({
   videoId,
+  onReady,
+  onPlay,
+  onPause,
+  onSeek,
 }: VideoPlayerProps) {
+
+  const handleReady: YouTubeProps["onReady"] = (
+    event
+  ) => {
+    onReady?.(event.target);
+  };
+
+  const handleStateChange: YouTubeProps["onStateChange"] = (
+    event
+  ) => {
+    const currentTime = event.target.getCurrentTime();
+    if (event.data === 1) {
+      onSeek?.(currentTime);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -20,6 +43,10 @@ function VideoPlayer({
             autoplay: 0,
           },
         }}
+        onReady={handleReady}
+        onPlay={onPlay}
+        onPause={onPause}
+        onStateChange={handleStateChange}
       />
 
     </div>
@@ -27,3 +54,4 @@ function VideoPlayer({
 }
 
 export default VideoPlayer;
+

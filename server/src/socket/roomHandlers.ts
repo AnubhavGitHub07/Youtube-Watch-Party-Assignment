@@ -37,9 +37,11 @@ export const registerRoomHandlers = (
         ({
             roomId,
             username,
+            roomName,
         }: {
             roomId: string;
             username: string;
+            roomName?: string;
         }) => {
 
             socket.join(roomId);
@@ -49,6 +51,7 @@ export const registerRoomHandlers = (
             if (!room) {
                 room = {
                     id: roomId,
+                    roomName: roomName || "Watch Party Room",
                     hostId: socket.id,
 
                     currentVideoId: "",
@@ -92,4 +95,70 @@ export const registerRoomHandlers = (
             removeUserFromRoom(io, socket.id, roomId);
         }
     });
+
+    socket.on(
+        "change_video",
+        ({
+            roomId,
+            videoId,
+        }: {
+            roomId: string;
+            videoId: string;
+        }) => {
+
+            const room = rooms[roomId];
+
+            if (!room) return;
+
+            room.currentVideoId = videoId;
+
+            io.to(roomId).emit(
+                "video_changed",
+                {
+                    videoId,
+                }
+            );
+        }
+    );
+
+  
+socket.on(
+  "play",
+  ({ roomId }: { roomId: string }) => {
+
+    socket.to(roomId).emit(
+      "play_video"
+    );
+  }
+);
+
+socket.on(
+  "pause",
+  ({ roomId }: { roomId: string }) => {
+
+    socket.to(roomId).emit(
+      "pause_video"
+    );
+  }
+);
+
+socket.on(
+  "seek",
+  ({
+    roomId,
+    time,
+  }: {
+    roomId: string;
+    time: number;
+  }) => {
+
+    socket.to(roomId).emit(
+      "seek_video",
+      {
+        time,
+      }
+    );
+  }
+);
+
 };
