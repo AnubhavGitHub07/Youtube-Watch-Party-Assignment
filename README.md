@@ -30,7 +30,7 @@ Built with a modern SaaS-style UI and real-time multiplayer architecture using S
 * 🔗 Shareable room IDs
 * ⚡ WebSocket-powered architecture
 * 🌌 Futuristic SaaS-style UI
-* 📱 Responsive design
+
 
 ---
 
@@ -122,13 +122,14 @@ Socket.IO handles:
 
 ## 🏠 Homepage
 
+<img width="1470" height="802" alt="Screenshot 2026-05-28 at 11 22 54 PM" src="https://github.com/user-attachments/assets/4702307e-d93a-4ee6-83f8-dc5455efbf3c" />
 
 
 ---
 
 ## 🎥 Room Page
 
-<!-- Add Room Page Screenshot Here -->
+<img width="1470" height="802" alt="Screenshot 2026-05-28 at 11 24 45 PM" src="https://github.com/user-attachments/assets/07a7b67d-3678-425f-a644-4cac8b5ec9a1" />
 
 ---
 
@@ -275,7 +276,7 @@ npm run dev
 ## Frontend `.env`
 
 ```env
-VITE_SERVER_URL=http://localhost:5000
+VITE_SERVER_URL=http://localhost:5001
 ```
 
 ---
