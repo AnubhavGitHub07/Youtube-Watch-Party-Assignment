@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DottedSurface } from "@/components/ui/dotted-surface";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -39,24 +40,36 @@ function HomePage() {
   const isJoinDisabled = !username.trim() || !roomId.trim();
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg space-y-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden bg-black select-none">
+      <DottedSurface />
+
+      {/* Subtle Ambient Halo Glows */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-pink-500/5 blur-[100px] rounded-full pointer-events-none z-0" />
+      <div className="absolute bottom-1/4 left-1/3 w-[300px] h-[300px] bg-violet-500/5 blur-[110px] rounded-full pointer-events-none z-0" />
+
+      <div className="w-full max-w-4xl px-4 space-y-9 relative z-10 animate-fade-in-up flex flex-col items-center -translate-y-6 sm:-translate-y-10">
 
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-r from-red-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-            Watch Party
+        <div className="text-center space-y-3 relative w-full flex flex-col items-center">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 via-pink-500/10 to-violet-500/10 opacity-30 blur-[60px] w-64 h-16 mx-auto rounded-full pointer-events-none -z-10" />
+
+          <h1 className="text-3xl min-[480px]:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-white bg-clip-text text-transparent animate-title-premium select-none whitespace-nowrap leading-none filter drop-shadow-[0_4px_16px_rgba(255,255,255,0.12)] pb-1.5">
+            YouTube Watch Party
           </h1>
-          <p className="text-slate-400 text-sm tracking-wide">
+
+          <p className="text-sm sm:text-base md:text-lg font-semibold tracking-wide bg-gradient-to-r from-rose-500 via-pink-500 to-violet-400 bg-clip-text text-transparent max-w-xl mx-auto filter drop-shadow-[0_0_12px_rgba(244,63,94,0.15)]">
             Watch YouTube videos together in real time
           </p>
         </div>
 
+        {/* Form Container */}
+        <div className="w-full max-w-lg space-y-6">
+
         {/* Username — shared across both flows */}
-        <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-6">
+        <div className="bg-black border border-zinc-800 rounded-lg p-6 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-zinc-700">
           <label
             htmlFor="username-input"
-            className="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2"
+            className="block text-sm font-medium text-zinc-400 mb-2"
           >
             Your Name
           </label>
@@ -66,13 +79,13 @@ function HomePage() {
             placeholder="e.g. Anubhav"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 outline-none
-                       text-white placeholder-slate-500
-                       focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30
-                       transition-all duration-200"
+            className="w-full h-11 px-4 rounded-md bg-black border border-zinc-800 outline-none
+                       text-white placeholder-zinc-600 text-sm font-normal
+                       hover:border-zinc-700 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400
+                       transition-all duration-150"
           />
           {!username.trim() && (
-            <p className="text-xs text-slate-500 mt-2">
+            <p className="text-xs text-zinc-500 mt-2 font-normal">
               Enter your name to get started
             </p>
           )}
@@ -82,16 +95,13 @@ function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
           {/* Create Room Card */}
-          <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 flex flex-col space-y-4
-                          hover:border-red-500/30 transition-colors duration-300">
-            <div className="space-y-1">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-500/15 text-red-400 text-sm">
-                  ✦
-                </span>
+          <div className="bg-black border border-zinc-800 rounded-lg p-6 flex flex-col space-y-5
+                          hover:border-zinc-700 transition-all duration-300 shadow-2xl relative overflow-hidden group">
+            <div className="space-y-1.5">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
                 Create Room
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-zinc-500">
                 Start a new watch party
               </p>
             </div>
@@ -99,10 +109,10 @@ function HomePage() {
             <div className="flex-1">
               <label
                 htmlFor="room-name-input"
-                className="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2"
+                className="block text-sm font-medium text-zinc-400 mb-2"
               >
                 Room Name
-                <span className="text-slate-600 ml-1 normal-case tracking-normal font-normal">
+                <span className="text-zinc-600 ml-1 font-normal text-xs">
                   (optional)
                 </span>
               </label>
@@ -112,10 +122,10 @@ function HomePage() {
                 placeholder="e.g. Marvel Night"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
-                className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 outline-none
-                           text-white placeholder-slate-500 text-sm
-                           focus:border-red-500/60 focus:ring-1 focus:ring-red-500/30
-                           transition-all duration-200"
+                className="w-full h-11 px-4 rounded-md bg-black border border-zinc-800 outline-none
+                           text-white placeholder-zinc-600 text-sm font-normal
+                           hover:border-zinc-700 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400
+                           transition-all duration-150"
               />
             </div>
 
@@ -123,28 +133,23 @@ function HomePage() {
               id="create-room-btn"
               onClick={handleCreateRoom}
               disabled={isCreateDisabled}
-              className="w-full py-3 rounded-xl font-semibold text-sm tracking-wide
-                         bg-gradient-to-r from-red-500 to-pink-500
-                         hover:from-red-600 hover:to-pink-600
-                         disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed
-                         transition-all duration-200 shadow-lg shadow-red-500/20
-                         disabled:shadow-none cursor-pointer"
+              className="w-full h-11 px-4 rounded-md font-semibold text-sm text-black bg-white
+                         hover:bg-zinc-200 active:bg-zinc-300
+                         disabled:bg-zinc-900 disabled:text-zinc-600 disabled:border-zinc-900 disabled:cursor-not-allowed
+                         transition-all duration-150 cursor-pointer"
             >
               Create & Join
             </button>
           </div>
 
           {/* Join Room Card */}
-          <div className="bg-slate-900/80 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 flex flex-col space-y-4
-                          hover:border-sky-500/30 transition-colors duration-300">
-            <div className="space-y-1">
-              <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                <span className="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-sky-500/15 text-sky-400 text-sm">
-                  →
-                </span>
+          <div className="bg-black border border-zinc-800 rounded-lg p-6 flex flex-col space-y-5
+                          hover:border-zinc-700 transition-all duration-300 shadow-2xl relative overflow-hidden group">
+            <div className="space-y-1.5">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
                 Join Room
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-zinc-500">
                 Enter an existing room
               </p>
             </div>
@@ -152,7 +157,7 @@ function HomePage() {
             <div className="flex-1">
               <label
                 htmlFor="room-id-input"
-                className="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2"
+                className="block text-sm font-medium text-zinc-400 mb-2"
               >
                 Room ID
               </label>
@@ -162,10 +167,10 @@ function HomePage() {
                 placeholder="e.g. room-abc123"
                 value={roomId}
                 onChange={(e) => setRoomId(e.target.value)}
-                className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 outline-none
-                           text-white placeholder-slate-500 text-sm
-                           focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/30
-                           transition-all duration-200"
+                className="w-full h-11 px-4 rounded-md bg-black border border-zinc-800 outline-none
+                           text-white placeholder-zinc-600 text-sm font-normal
+                           hover:border-zinc-700 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400
+                           transition-all duration-150"
               />
             </div>
 
@@ -173,18 +178,18 @@ function HomePage() {
               id="join-room-btn"
               onClick={handleJoinRoom}
               disabled={isJoinDisabled}
-              className="w-full py-3 rounded-xl font-semibold text-sm tracking-wide
-                         bg-gradient-to-r from-sky-500 to-blue-500
-                         hover:from-sky-600 hover:to-blue-600
-                         disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 disabled:cursor-not-allowed
-                         transition-all duration-200 shadow-lg shadow-sky-500/20
-                         disabled:shadow-none cursor-pointer"
+              className="w-full h-11 px-4 rounded-md font-semibold text-sm text-white bg-black border border-zinc-800
+                         hover:bg-zinc-900 hover:border-zinc-700
+                         disabled:bg-black disabled:border-zinc-900 disabled:text-zinc-600 disabled:cursor-not-allowed
+                         transition-all duration-150 cursor-pointer"
             >
               Join Room
             </button>
           </div>
 
         </div>
+
+      </div>
 
       </div>
     </div>
