@@ -1,13 +1,28 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DottedSurface } from "@/components/ui/dotted-surface";
 
 function HomePage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("");
   const [roomId, setRoomId] = useState("");
+
+  const [showKickedToast, setShowKickedToast] = useState(
+    !!location.state?.kicked
+  );
+
+  useEffect(() => {
+    if (location.state?.kicked) {
+      window.history.replaceState({}, document.title);
+      const timer = setTimeout(() => {
+        setShowKickedToast(false);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   const generateRoomId = (): string => {
     return `room-${Date.now().toString(36)}-${Math.random()
@@ -192,6 +207,24 @@ function HomePage() {
       </div>
 
       </div>
+
+      {showKickedToast && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm z-50 pointer-events-none">
+          <div className="bg-black border border-red-500/30 text-zinc-200 px-5 py-4 rounded-xl shadow-2xl shadow-red-500/10 flex items-center gap-3 animate-fade-in-down pointer-events-auto">
+            <div className="bg-red-500/10 p-2 rounded-lg text-red-400 animate-pulse">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-semibold text-sm text-red-400">Removed from Party</p>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                You have been removed from the watch party by the Host.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

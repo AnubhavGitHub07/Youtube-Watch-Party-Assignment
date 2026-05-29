@@ -317,5 +317,43 @@ export const registerRoomHandlers = (
         }
     );
 
+    socket.on(
+        "remove_participant",
+        ({
+            roomId,
+            targetSocketId,
+        }: {
+            roomId: string;
+            targetSocketId: string;
+        }) => {
+            const room = rooms[roomId];
+            if (!room) return;
+
+            const currentUser = room.participants.find(
+                (p) => p.socketId === socket.id
+            );
+
+            if (!isHost(currentUser)) {
+                return;
+            }
+
+            const targetParticipant = room.participants.find(
+                (p) => p.socketId === targetSocketId
+            );
+
+            if (!targetParticipant || targetParticipant.role === "HOST") {
+                return;
+            }
+
+            const targetSocket = io.sockets.sockets.get(targetSocketId);
+            if (targetSocket) {
+                targetSocket.emit("kicked", { roomId });
+                targetSocket.leave(roomId);
+            }
+
+            removeUserFromRoom(io, targetSocketId, roomId);
+        }
+    );
+
 
 };

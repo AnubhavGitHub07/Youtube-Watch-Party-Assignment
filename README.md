@@ -115,7 +115,6 @@ Socket.IO handles:
 
 * Vercel (Frontend)
 * Render (Backend)
-
 ---
 
 # 📸 Screenshots
